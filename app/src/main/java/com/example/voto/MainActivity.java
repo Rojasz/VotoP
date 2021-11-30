@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -41,11 +42,18 @@ Button votar,ver;
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setTitle("Voto en blanco");
-                    builder.setMessage("Usted ha votado en blanco.");
-                    builder.setPositiveButton("OK.", null);
+                    builder.setMessage("No ha seleccionado ninguna opción, desea votar en blanco?");
+                    builder.setPositiveButton("OK.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            contentValues.put("name", "blanco");
+                            Long rec = sqLiteDatabase.insert("tablavotos", null, contentValues);
+                        }
+                    });
+                    builder.setNegativeButton("VOLVER",null);
                     builder.setCancelable(true);
                     builder.show();
-                    contentValues.put("name", "blanco");
+
                 }
 
                 sqLiteDatabase=dBmain.getWritableDatabase();
